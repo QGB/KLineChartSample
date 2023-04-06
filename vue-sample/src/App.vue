@@ -13,6 +13,7 @@ import Update from "./chart/Update.vue";
 
 <template>
   <div id="app" class="app">
+    <Update />
     <ChartType />
     <Theme />
     <YAxis />
@@ -22,7 +23,6 @@ import Update from "./chart/Update.vue";
     <Indicator />
     <Overlay />
     <LoadMore />
-    <Update />
   </div>
 </template>
 
@@ -54,13 +54,13 @@ p {
 .k-line-chart-container {
   display: flex;
   flex-direction: column;
-  margin: 15px;
-  border-radius: 2px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin: 0;
+  border-radius: 0px;
+  box-shadow: 0 25px 14px rgba(0, 0, 0, 1);
   background-color: #ffffff;
-  width: 620px;
-  height: 440px;
-  padding: 16px 6px 16px 16px;
+  width: 100%;
+  height: 555px;
+  padding: 0px 0px 16px 16px;
 }
 
 .k-line-chart-title {
