@@ -13,7 +13,7 @@ import Update from "./chart/Update.vue";
 
 <template>
   <div id="app" class="app">
-    <Update />
+    <Update style="width=100%;"/>
     <ChartType />
     <Theme />
     <YAxis />
