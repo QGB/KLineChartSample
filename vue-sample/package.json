@@ -3,15 +3,16 @@
   "version": "9.x",
   "private": true,
   "scripts": {
+    "prepare": "patch-package",
     "start": "vite --host",
     "build": "vite build",
     "preview": "vite preview",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
   },
   "dependencies": {
-    "klinecharts": "^9.0.1",
-    "@klinecharts/pro": "^0.1.1",
-    "vue": "^3.2.45"
+    "klinecharts": "^9.5.0",
+    "vue": "^3.2.45",
+    "vue-router": "^4.0.13"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
@@ -19,6 +20,7 @@
     "@vue/eslint-config-prettier": "^7.0.0",
     "eslint": "^8.22.0",
     "eslint-plugin-vue": "^9.3.0",
+    "patch-package": "^8.0.0",
     "prettier": "^2.7.1",
     "vite": "^4.0.0"
   }

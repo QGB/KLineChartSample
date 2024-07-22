@@ -1,0 +1,17 @@
+diff --git a/node_modules/klinecharts/dist/klinecharts.js b/node_modules/klinecharts/dist/klinecharts.js
+index 6ec390c..f9a0bf7 100644
+--- a/node_modules/klinecharts/dist/klinecharts.js
++++ b/node_modules/klinecharts/dist/klinecharts.js
+@@ -1189,9 +1189,10 @@ function getDefaultVisibleRange() {
+  * limitations under the License.
+  */
+ var BarSpaceLimitContants = {
+-    MIN: 1,
+-    MAX: 50
++    MIN: 0.01,
++    MAX: 100
+ };
++console.log(BarSpaceLimitContants);
+ var DEFAULT_BAR_SPACE = 6;
+ var DEFAULT_OFFSET_RIGHT_DISTANCE = 50;
+ var TimeScaleStore = /** @class */ (function () {

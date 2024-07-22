@@ -1,21 +1,29 @@
 <template>
   <Layout title="实时更新">
-    <div id="update-k-line" class="k-line-chart" />
-    <div>
-      <input type="range" v-model="value" @input="handleChange" min=0 max=15000 style="width:100%;" ref="input" >
-      <input type="range" @input="input_100_change" min=-100 max=100 style="width:100%;" ref="input_100" >
-      <p>{{ value }}</p>
-    </div>
-      <div class="k-line-chart-menu-container">
-      <button v-on:click="button_update">update</button>
-        <button
+    <div id="update-k-line" class="k-line-chart"  />
+    <div class="k-line-chart-menu-container">
+      <button v-on:click="button_update">10update</button>
+      <button
           v-for="{ key, text } in types"
           :key="key"
           v-on:click="setYAxisType(key)"
         >
         {{ text }}
       </button>
+      <button v-on:click="button_zoom">zoom</button>
+      <input type="checkbox" v-model="isChecked" v-on:click="check_boll" checked> boll    
     </div>
+    
+    <div>
+      <input type="range" v-model="value" @input="handleChange" min=0 max=15000 style="width:100%;" ref="input" >
+      <input type="range" @input="input_100_change" min=-100 max=100 style="width:100%;" ref="input_100" >
+      <p style="display: inline-block;">{{ value }}</p>
+      <input style="display: inline-block;width:86%;" v-model="update_url" placeholder="输入更新地址1">
+    </div>
+    
+
+    
+    
   </Layout>
 </template>
 
@@ -37,15 +45,14 @@ export default {
       calcParams: [21,3]
     }
     this.chart.createIndicator(d_boll, false, { id: "candle_pane" });
-    this.chart.createIndicator({ 
-      name: 'BOLL',
-      precision: 3,
-      calcParams: [21,4]
-    }, false, { id: "candle_pane" });
+    // this.chart.overrideIndicator({ name: 'BOLL', visible: true})
 
     // this.input_max = parseInt(this.$refs.input.max);
     // console.log(this.input_max);
     // this.value=this.input_max/2
+    this.chart.createIndicator("VOL");
+    this.chart.setPriceVolumePrecision(6,2)// 价格 成交量 精度位数
+
     const dataList = this.chart.getDataList();
     this.lastData = dataList[dataList.length - 2];
     this.value=dataList[dataList.length - 1].close;
@@ -69,14 +76,36 @@ export default {
         { key: "percentage", text: "百分比轴" },
         { key: "log", text: "对数轴" },
       ],
+      isChecked: true,// 没有这个默认值，前两次选择没有反应
+      update_url: "http://192.168.1.10:1133/U.r(binanceT);r=binanceT.get_klines('NULS',ms=1717786584000)",  
     }
   },
   methods: {
+    check_boll(event) {
+     console.log([this.isChecked,this.chart])
+     //window.boll=this.chart._chartStore.getIndicatorStore()._instances.get("candle_pane").get('BOLL');
+     if (this.isChecked) {
+          // 复选框被选中
+          //console.log("复选框已选中");
+          //window.boll.setVisible(false);
+          //this.chart.overriderIndicator({ name: 'BOLL', visible: false })
+          this.chart.overrideIndicator({ name: 'BOLL', visible: false })
+        } else {
+          //window.boll.setVisible(true);
+          this.chart.overrideIndicator({ name: 'BOLL', visible: true})
+        }
+    },
+    button_zoom(event) {
+      window.chart = this.chart;
+      this.chart.getChartStore().getTimeScaleStore().zoom(-0.5)
+    },
     button_update(event) {
       window.chart = this.chart;
       // const dataList = generatedDataList();
       // fetch('https://5.vfvf.ml/r=binanceT.get_kline()')
-      fetch('https://5.vfvf.ml/r=binanceT.get_kline_1s(N.geta(),return_json=1)%23-'+window.location.search)
+      console.log(this.update_url)
+      // fetch('https://10.vfvf.ml/r=binanceT.get_kline_1s(N.geta(),return_json=1)%23-'+window.location.search)
+      fetch(this.update_url)
         .then(response => response.json())
         .then(dataList => {
           this.chart.applyNewData(dataList);
