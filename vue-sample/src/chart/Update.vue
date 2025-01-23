@@ -31,12 +31,22 @@
 import { dispose, init } from "klinecharts";
 import generatedDataList from "../generatedDataList";
 import Layout from "../Layout.vue";
+import * as U from "../qgb_utils.js";
+
 
 export default {
   name: "ChartUpdate",
   components: { Layout },
   mounted: function () {
     this.chart = init("update-k-line");
+
+    this.chart.setStyles(U.getTooltipOptions('standard', this.candleShowRule, this.indicatorShowRule));
+
+    // 确保 chartStore 使用自定义的时间格式化函数
+    const chartStore = this.chart.getChartStore();
+    chartStore.getCustomApi().formatDate = U.customFormatDate;
+
+
 
     this.chart.applyNewData(generatedDataList());
     const d_boll = { 
@@ -67,6 +77,7 @@ export default {
   unmounted: function () {
     dispose("update-k-line");
   },
+
   data() {
 
     return {
@@ -77,7 +88,7 @@ export default {
         { key: "log", text: "对数轴" },
       ],
       isChecked: true,// 没有这个默认值，前两次选择没有反应
-      update_url: "http://192.168.1.10:1133/U.r(binanceT);r=binanceT.get_klines('NULS',ms=1717786584000)",  
+      update_url: `http://${window.location.hostname}:1133/U.r(binanceT);r=binanceT.get_klines('STG',ms=1733128847000)`,
     }
   },
   methods: {
