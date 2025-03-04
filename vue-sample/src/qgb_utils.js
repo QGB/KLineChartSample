@@ -23,7 +23,7 @@ export function getTooltipOptions(candleShowType, msg, indicatorShowRule) {
             const { prev, current } = data;
             const prevClose = prev?.close ?? current.open;
             const change = ((current.close - prevClose) / prevClose) * 100;
-            const oc = ((current.open - current.close) / Math.min(current.open,current.close)) * 100;
+            const oc = ((current.close-current.open ) / Math.min(current.open,current.close)) * 100;
             const hlr = ((current.high - current.low) / current.low) * 100;
             return [
               { title: ''+msg+'  ', value: '{time}' },
