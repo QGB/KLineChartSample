@@ -1,6 +1,7 @@
 <template>
   <Layout title="">
     <div :id="'update-k-line-' + interval" class="k-line-chart" />
+ 
   </Layout>
 </template>
 
@@ -57,13 +58,41 @@ export default {
     this.registerChartUpdate({ interval: this.interval, update_kline: this.update_kline,
     update_kline_data:this.update_kline_data });
     window.chart=this.chart;
+
+this.chart.subscribeAction('onCrosshairChange', (params) => {
+  // console.log('onCrosshairChange',);
+  if (window.isKeyTPressed) {
+    const newTimestamp = params.kLineData.timestamp;
+    let currentHash = window.location.hash.slice(1); // 去除开头的 #
+
+    // 判断是否已存在 ms 参数（逗号分隔）
+    const hasMS = /(^|,)ms=\d+/.test(currentHash);
+    // console.log(currentHash,hasMS);
+    // 处理逻辑
+    let newHash;
+    if (hasMS) {
+      // 替换现有 ms 参数
+      newHash = currentHash.replace(/(^|,)ms=\d+/g, `$1ms=${newTimestamp}`);
+    } else {
+      // 追加新参数（用逗号连接）
+      newHash = currentHash ? `${currentHash},ms=${newTimestamp}` : `ms=${newTimestamp}`;
+    }
+
+    window.location.hash=newHash;
+    // 更新 URL（保留历史记录）
+    // window.history.replaceState(null, '', `#${newHash}`);
+  }
+});
+
+
+
   },
   beforeUnmount() {
     dispose('update-k-line-' + this.interval);
   },
   methods: {
     update_kline(url) {
-      console.log('update_kline debug '+this.interval);
+      // console.log('update_kline debug '+this.interval);
       fetch(url)
         .then(response => response.json())
         .then(dataList => {
@@ -84,6 +113,10 @@ export default {
     update_kline_data(data) {
       data.textContent='update_kline_data'
     }
+
+
+    
+
   }
 };
 </script>

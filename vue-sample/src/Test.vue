@@ -45,7 +45,9 @@ const handleUpdate = () => {
 
 onMounted(() => {
   update_args();
+
   document.addEventListener('keydown', (event) => {
+    if (event.key === 't') {window.isKeyTPressed=true; } //console.log('t-down');
     if (event.key === 'u') {
       update_all();
     } else if (event.key === 'a') {
@@ -59,6 +61,12 @@ onMounted(() => {
       }
     }
   });
+
+  document.addEventListener('keyup', (event) => {
+  if (event.key === 't') {window.isKeyTPressed=false; }
+  });
+
+
 });
 </script>
 
@@ -95,6 +103,7 @@ onMounted(() => {
 <ChartUpdate :interval="'3d'" style="width: 100%;"/>
 <ChartUpdate :interval="'1w'" style="width: 100%;"/>
 <ChartUpdate :interval="'1M'" style="width: 100%;"/>
+
   </div>
 </template>
 
